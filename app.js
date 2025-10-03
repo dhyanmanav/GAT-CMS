@@ -10,56 +10,211 @@ class CertificateApp {
     }
 
     loadApplicationData() {
-    // Check if any stored data exists in localStorage
-    const storedData = localStorage.getItem('gatCertificateData');
-    if (storedData) {
-        return JSON.parse(storedData);
-    }
-
-    // Default application data (EMPTY placeholders)
-    return {
-        users: [],                // No default students or admins
-        certificateRequests: [],  // No requests yet
-        certificateTemplates: [
-            {
-                type: "bonafide",
-                name: "Bonafide Certificate",
-                description: "Certificate confirming student enrollment",
-                template: "This is to certify that {studentName}, bearing Registration Number {studentId}, is a bonafide student of {department}, {year} studying in our institution during the academic year {academicYear}.",
-                validityPeriod: "6 months",
-                signatoryRole: "HOD"
-            },
-            {
-                type: "internship_completion",
-                name: "Internship Completion Certificate",
-                description: "Certificate of internship completion",
-                template: "This is to certify that {studentName}, Registration Number {studentId}, has successfully completed internship at {company} from {startDate} to {endDate} under the supervision of {supervisor}.",
-                validityPeriod: "Permanent",
-                signatoryRole: "Academic Officer"
-            },
-            {
-                type: "transcript",
-                name: "Official Transcript",
-                description: "Complete academic record",
-                template: "Official Academic Transcript for {studentName}, Registration Number {studentId}, Department of {department}. This transcript contains complete academic records.",
-                validityPeriod: "Permanent",
-                signatoryRole: "Registrar"
-            }
-        ],
-        auditLogs: [],             // No logs
-        verificationDatabase: [],  // No certificates in verification DB
-        systemSettings: {
-            instituteName: "Global Academy of Technology",
-            instituteCode: "GAT",
-            address: "Ideal Homes Township, Rajarajeshwari Nagar, Bangalore - 560098",
-            phone: "+91-80-28483232",
-            email: "info@gat.ac.in",
-            website: "www.gat.ac.in",
-            currentAcademicYear: "2024-2025"
+        // Check for stored data first, otherwise use default data
+        const storedData = localStorage.getItem('gatCertificateData');
+        if (storedData) {
+            return JSON.parse(storedData);
         }
-    };
-}
 
+        // Default application data
+        return {
+            users: [
+                {
+                    id: "1",
+                    type: "student",
+                    name: "Rajesh Kumar",
+                    email: "rajesh.kumar@gat.ac.in",
+                    password: "student123",
+                    studentId: "4NM20CS001",
+                    department: "Computer Science Engineering",
+                    year: "3rd Year",
+                    section: "A",
+                    phone: "+91-9876543210",
+                    address: "123, MG Road, Bangalore, Karnataka - 560001"
+                },
+                {
+                    id: "2",
+                    type: "student",
+                    name: "Priya Sharma",
+                    email: "priya.sharma@gat.ac.in",
+                    password: "student123",
+                    studentId: "4NM20CS025",
+                    department: "Computer Science Engineering",
+                    year: "3rd Year",
+                    section: "B",
+                    phone: "+91-9876543211",
+                    address: "456, Brigade Road, Bangalore, Karnataka - 560025"
+                },
+                {
+                    id: "3",
+                    type: "admin",
+                    name: "Dr. Suresh Reddy",
+                    email: "suresh.reddy@gat.ac.in",
+                    password: "admin123",
+                    role: "HOD",
+                    department: "Computer Science Engineering",
+                    phone: "+91-9876543212"
+                },
+                {
+                    id: "4",
+                    type: "admin",
+                    name: "Ms. Anitha Rao",
+                    email: "anitha.rao@gat.ac.in",
+                    password: "admin123",
+                    role: "Academic Officer",
+                    department: "Academic Administration",
+                    phone: "+91-9876543213"
+                }
+            ],
+            certificateRequests: [
+                {
+                    id: "CR001",
+                    studentId: "4NM20CS001",
+                    studentName: "Rajesh Kumar",
+                    certificateType: "bonafide",
+                    purpose: "Bank Loan Application",
+                    requestDate: "2024-10-01",
+                    status: "approved",
+                    approvedBy: "Dr. Suresh Reddy",
+                    approvedDate: "2024-10-02",
+                    issuedDate: "2024-10-02",
+                    certificateId: "GAT/BF/2024/001",
+                    qrCode: "GAT-CSE-BF-2024-001",
+                    trackingId: "TRK001",
+                    urgency: "normal",
+                    comments: "For education loan processing"
+                },
+                {
+                    id: "CR002",
+                    studentId: "4NM20CS025",
+                    studentName: "Priya Sharma",
+                    certificateType: "internship_completion",
+                    purpose: "Job Application",
+                    requestDate: "2024-10-03",
+                    status: "pending",
+                    urgency: "high",
+                    comments: "Required for upcoming interview on Oct 10th",
+                    internshipDetails: {
+                        company: "TechCorp Solutions",
+                        duration: "6 months",
+                        startDate: "2024-01-15",
+                        endDate: "2024-07-15",
+                        supervisor: "Mr. Vikram Gupta"
+                    }
+                },
+                {
+                    id: "CR003",
+                    studentId: "4NM20CS001",
+                    studentName: "Rajesh Kumar",
+                    certificateType: "transcript",
+                    purpose: "Higher Education",
+                    requestDate: "2024-09-28",
+                    status: "issued",
+                    approvedBy: "Ms. Anitha Rao",
+                    approvedDate: "2024-09-29",
+                    issuedDate: "2024-09-30",
+                    certificateId: "GAT/TR/2024/001",
+                    qrCode: "GAT-CSE-TR-2024-001",
+                    trackingId: "TRK002",
+                    urgency: "normal",
+                    comments: "Official transcript for MS admission"
+                },
+                {
+                    id: "CR004",
+                    studentId: "4NM20CS001",
+                    studentName: "Rajesh Kumar",
+                    certificateType: "bonafide",
+                    purpose: "Passport Application", 
+                    requestDate: "2024-09-25",
+                    status: "pending",
+                    urgency: "normal",
+                    comments: "Required for passport renewal process",
+                    trackingId: "TRK003"
+                }
+            ],
+            certificateTemplates: [
+                {
+                    type: "bonafide",
+                    name: "Bonafide Certificate",
+                    description: "Certificate confirming student enrollment",
+                    template: "This is to certify that {studentName}, bearing Registration Number {studentId}, is a bonafide student of {department}, {year} studying in our institution during the academic year {academicYear}.",
+                    validityPeriod: "6 months",
+                    signatoryRole: "HOD"
+                },
+                {
+                    type: "internship_completion",
+                    name: "Internship Completion Certificate",
+                    description: "Certificate of internship completion",
+                    template: "This is to certify that {studentName}, Registration Number {studentId}, has successfully completed internship at {company} from {startDate} to {endDate} under the supervision of {supervisor}.",
+                    validityPeriod: "Permanent",
+                    signatoryRole: "Academic Officer"
+                },
+                {
+                    type: "transcript",
+                    name: "Official Transcript",
+                    description: "Complete academic record",
+                    template: "Official Academic Transcript for {studentName}, Registration Number {studentId}, Department of {department}. This transcript contains complete academic records.",
+                    validityPeriod: "Permanent",
+                    signatoryRole: "Registrar"
+                }
+            ],
+            auditLogs: [
+                {
+                    id: "AL001",
+                    timestamp: new Date().toISOString(),
+                    userId: "3",
+                    userName: "Dr. Suresh Reddy",
+                    action: "certificate_approved",
+                    resourceId: "CR001",
+                    description: "Approved bonafide certificate request for Rajesh Kumar"
+                },
+                {
+                    id: "AL002",
+                    timestamp: new Date().toISOString(),
+                    userId: "system",
+                    userName: "System",
+                    action: "certificate_generated",
+                    resourceId: "CR001",
+                    description: "Generated certificate with ID GAT/BF/2024/001"
+                }
+            ],
+            verificationDatabase: [
+                {
+                    certificateId: "GAT/BF/2024/001",
+                    qrCode: "GAT-CSE-BF-2024-001",
+                    studentName: "Rajesh Kumar",
+                    studentId: "4NM20CS001",
+                    certificateType: "Bonafide Certificate",
+                    issuedDate: "2024-10-02",
+                    validUntil: "2025-04-02",
+                    status: "valid",
+                    issuer: "Dr. Suresh Reddy",
+                    department: "Computer Science Engineering"
+                },
+                {
+                    certificateId: "GAT/TR/2024/001",
+                    qrCode: "GAT-CSE-TR-2024-001",
+                    studentName: "Rajesh Kumar",
+                    studentId: "4NM20CS001",
+                    certificateType: "Official Transcript",
+                    issuedDate: "2024-09-30",
+                    validUntil: "Permanent",
+                    status: "valid",
+                    issuer: "Ms. Anitha Rao",
+                    department: "Academic Administration"
+                }
+            ],
+            systemSettings: {
+                instituteName: "Global Academy of Technology",
+                instituteCode: "GAT",
+                address: "Ideal Homes Township, Rajarajeshwari Nagar, Bangalore - 560098",
+                phone: "+91-80-28483232",
+                email: "info@gat.ac.in",
+                website: "www.gat.ac.in",
+                currentAcademicYear: "2024-2025"
+            }
+        };
+    }
 
     saveData() {
         localStorage.setItem('gatCertificateData', JSON.stringify(this.data));
