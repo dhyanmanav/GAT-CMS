@@ -6,8 +6,8 @@
 [![License](https://img.shields.io/badge/License-MIT-purple)](LICENSE)
 
 > **A revolutionary Progressive Web App for streamlined student certificate management**
-## By  - Meghana HJ,
-##     - Dhyan Kumar M
+ By  - Meghana HJ,
+     - Dhyan Kumar M
 
 Transform your department's certificate workflow from manual, desk-visit chaos to a single, beautiful, trackable digital channel. Built with modern web technologies and stunning glassmorphism UI.
 
