@@ -6,11 +6,13 @@
 [![License](https://img.shields.io/badge/License-MIT-purple)](LICENSE)
 
 > **A revolutionary Progressive Web App for streamlined student certificate management**
+> **By - Meghana HJ
+>      - Dhyan Kumar M**
 
 Transform your department's certificate workflow from manual, desk-visit chaos to a single, beautiful, trackable digital channel. Built with modern web technologies and stunning glassmorphism UI.
 
 ## 🌟 **Live Demo**
-**Experience it now:** [GAT Certificate System](https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/03a7ab2512122ada4f229d3dd6d236e5/4c94a8ce-5168-40d2-81e4-c84243b26a32/index.html)
+**Experience it now:** [GAT Certificate System](gat-cms.netlify.app)
 
 ## ✨ **Key Features**
 
