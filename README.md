@@ -12,7 +12,7 @@
 Transform your department's certificate workflow from manual, desk-visit chaos to a single, beautiful, trackable digital channel. Built with modern web technologies and stunning glassmorphism UI.
 
 ## 🌟 **Live Demo**
-**Experience it now:** [GAT Certificate System](gat-cms.netlify.app)
+**Experience it now:** [GAT Certificate System](https://gat-cms.netlify.app/)
 
 ## ✨ **Key Features**
 
