@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAT Certificate Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzYzNjZmMSIvPgo8cGF0aCBkPSJNOCAxMmg2djJIOHYtMnptMCA0aDEydjJIOHYtMnptMCA0aDEwdjJIOHYtMnoiIGZpbGw9IndoaXRlIi8+CjxyZWN0IHg9IjIwIiB5PSI4IiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiByeD0iMiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Additional PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="GAT CMS">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#6366f1">
+    <meta name="application-name" content="GAT Certificate System">
+    
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="logo">
+                        <div class="logo-icon">📋</div>
+                        <h1>GAT Certificate System</h1>
+                    </div>
+                    <p>Global Academy of Technology</p>
+                </div>
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="loginEmail" class="form-label">Email Address</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword" class="form-label">Password</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full-width">Sign In</button>
+                </form>
+                <div class="demo-accounts">
+                    <p>Demo Accounts:</p>
+                    <div class="demo-buttons">
+                        <button class="btn btn--outline btn--sm" onclick="fillDemoLogin('student')">Student Demo</button>
+                        <button class="btn btn--outline btn--sm" onclick="fillDemoLogin('admin')">Admin Demo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="main-app hidden">
+        <!-- Navigation -->
+        <nav class="nav-sidebar">
+            <div class="nav-header">
+                <div class="nav-logo">
+                    <div class="logo-icon">📋</div>
+                    <span>GAT CMS</span>
+                </div>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <!-- Navigation items will be populated by JavaScript -->
+            </div>
+            <div class="nav-footer">
+                <div class="user-profile" id="userProfile">
+                    <div class="user-avatar">👤</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName"></div>
+                        <div class="user-role" id="userRole"></div>
+                    </div>
+                </div>
+                <button class="btn btn--secondary btn--sm" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1 id="pageTitle">Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn--outline" onclick="toggleNotifications()">
+                        <span class="notification-icon">🔔</span>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div id="dashboardContent" class="content-section">
+                <!-- Student Dashboard -->
+                <div id="studentDashboard" class="dashboard hidden">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📄</div>
+                            <div class="stat-content">
+                                <h3 id="totalRequests">0</h3>
+                                <p>Total Requests</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏳</div>
+                            <div class="stat-content">
+                                <h3 id="pendingRequests">0</h3>
+                                <p>Pending</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-content">
+                                <h3 id="approvedRequests">0</h3>
+                                <p>Approved</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-content">
+                                <h3 id="issuedRequests">0</h3>
+                                <p>Issued</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-section">
+                        <button class="btn btn--primary btn--lg" onclick="showRequestForm()">
+                            <span>+ Request New Certificate</span>
+                        </button>
+                    </div>
+
+                    <div class="recent-requests">
+                        <h2>Recent Requests</h2>
+                        <div id="studentRequestsList" class="requests-list">
+                            <!-- Recent requests will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Dashboard -->
+                <div id="adminDashboard" class="dashboard hidden">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📋</div>
+                            <div class="stat-content">
+                                <h3 id="adminPendingRequests">0</h3>
+                                <p>Pending Review</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-content">
+                                <h3 id="adminApprovedToday">0</h3>
+                                <p>Approved Today</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-content">
+                                <h3 id="adminIssuedThisMonth">0</h3>
+                                <p>Issued This Month</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-content">
+                                <h3 id="totalStudents">0</h3>
+                                <p>Active Students</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pending-reviews">
+                        <h2>Pending Reviews</h2>
+                        <div id="adminRequestsList" class="requests-list">
+                            <!-- Pending requests will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate Requests Content -->
+            <div id="requestsContent" class="content-section hidden">
+                <div class="content-toolbar">
+                    <div class="search-filter">
+                        <input type="text" id="requestsSearch" class="form-control" placeholder="Search requests...">
+                        <select id="statusFilter" class="form-control">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="issued">Issued</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <button class="btn btn--primary" onclick="showRequestForm()">New Request</button>
+                </div>
+                <div id="allRequestsList" class="requests-table">
+                    <!-- All requests table will be populated here -->
+                </div>
+            </div>
+
+            <!-- QR Verification Content -->
+            <div id="verificationContent" class="content-section hidden">
+                <div class="verification-container">
+                    <h2>Certificate Verification</h2>
+                    <div class="verification-options">
+                        <div class="verification-card">
+                            <h3>Manual Verification</h3>
+                            <div class="form-group">
+                                <label class="form-label">Certificate ID or QR Code</label>
+                                <input type="text" id="verificationInput" class="form-control" placeholder="Enter certificate ID or QR code...">
+                                <small class="form-help">Try: GAT/BF/2024/001 or GAT/TR/2024/001</small>
+                            </div>
+                            <button class="btn btn--primary" onclick="verifyCertificate()">Verify Certificate</button>
+                        </div>
+                        <div class="verification-card">
+                            <h3>QR Code Scanner</h3>
+                            <div id="qrScanner" class="qr-scanner">
+                                <div class="scanner-placeholder">
+                                    <div class="scanner-icon">📷</div>
+                                    <p>QR Scanner functionality would access device camera in production</p>
+                                    <p><strong>Demo Mode:</strong> Use manual verification with test IDs</p>
+                                </div>
+                                <button class="btn btn--secondary" onclick="startQRScan()">Start QR Scan</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="verificationResult" class="verification-result hidden">
+                        <!-- Verification results will be shown here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit Logs Content -->
+            <div id="auditContent" class="content-section hidden">
+                <div class="content-toolbar">
+                    <h2>Audit Logs</h2>
+                    <div class="search-filter">
+                        <input type="text" id="auditSearch" class="form-control" placeholder="Search logs...">
+                        <select id="actionFilter" class="form-control">
+                            <option value="">All Actions</option>
+                            <option value="certificate_requested">Certificate Requested</option>
+                            <option value="certificate_approved">Certificate Approved</option>
+                            <option value="certificate_generated">Certificate Generated</option>
+                            <option value="certificate_rejected">Certificate Rejected</option>
+                            <option value="user_login">User Login</option>
+                            <option value="certificate_verified">Certificate Verified</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="auditLogsList" class="audit-logs">
+                    <!-- Audit logs will be populated here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="requestModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Request Certificate</h2>
+                <button class="modal-close" onclick="closeModal('requestModal')">&times;</button>
+            </div>
+            <form id="certificateRequestForm">
+                <div class="form-step" id="step1">
+                    <div class="form-group">
+                        <label class="form-label">Certificate Type</label>
+                        <select id="certificateType" class="form-control" required>
+                            <option value="">Select Certificate Type</option>
+                            <option value="bonafide">Bonafide Certificate</option>
+                            <option value="internship_completion">Internship Completion</option>
+                            <option value="transcript">Official Transcript</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Purpose</label>
+                        <input type="text" id="purpose" class="form-control" placeholder="Purpose of certificate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Urgency</label>
+                        <select id="urgency" class="form-control" required>
+                            <option value="normal">Normal (5-7 days)</option>
+                            <option value="high">High (2-3 days)</option>
+                            <option value="urgent">Urgent (1 day)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Additional Comments</label>
+                        <textarea id="comments" class="form-control" rows="3" placeholder="Any additional information..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--secondary" onclick="closeModal('requestModal')">Cancel</button>
+                    <button type="submit" class="btn btn--primary">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="detailModal" class="modal hidden">
+        <div class="modal-content modal-content--large">
+            <div class="modal-header">
+                <h2>Certificate Details</h2>
+                <button class="modal-close" onclick="closeModal('detailModal')">&times;</button>
+            </div>
+            <div id="detailModalContent" class="modal-body">
+                <!-- Certificate details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" onclick="closeModal('detailModal')">Close</button>
+                <div id="detailModalActions">
+                    <!-- Action buttons will be populated based on user role and request status -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-content">
+            <div class="toast-icon" id="toastIcon"></div>
+            <div class="toast-message" id="toastMessage"></div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <!-- PWA Install Prompt -->
+    <div id="installPrompt" class="install-prompt hidden">
+        <div class="install-content">
+            <div class="install-icon">📱</div>
+            <div class="install-text">
+                <h3>Install GAT CMS</h3>
+                <p>Install this app on your device for easy access</p>
+            </div>
+            <div class="install-actions">
+                <button class="btn btn--secondary btn--sm" onclick="dismissInstallPrompt()">Not now</button>
+                <button class="btn btn--primary btn--sm" onclick="installPWA()">Install</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
